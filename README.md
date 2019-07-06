@@ -1,6 +1,6 @@
-# first_app
+# Project Insight
 
-A new Flutter project.
+A new VolkerWessels Infra Competence Centre iniative.
 
 ## Getting Started
 
