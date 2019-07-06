@@ -12,7 +12,7 @@
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAx9S-W7-r2ksiWU2vDukp8tRSeacRyHw0"/>
+            android:value="MISSINGAPI"/> //USE YOUR OWN API TO TEST THE APP
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

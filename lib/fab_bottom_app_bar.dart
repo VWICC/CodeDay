@@ -1,5 +1,8 @@
-
-
+import 'package:Project_Insight/Menu.dart';
+import 'package:Project_Insight/main.dart';
+import 'package:Project_Insight/Collegas.dart';
+import 'package:Project_Insight/Feedback.dart';
+import 'package:Project_Insight/ProjectsPage.dart';
 import 'package:flutter/material.dart';
 
 class FABBottomAppBarItem {
@@ -43,8 +46,33 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     widget.onTabSelected(index);
     setState(() {
       _selectedIndex = index;
+      print(index);
     });
-  }
+    if (index == 0) {
+      UpdateMapStyle();
+    }
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainProjectPage()),
+      );
+    }
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainCollegaPage()),
+      );
+    }
+    if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainFeedback()),
+      );
+    }
+    else {
+      print("wat");
+    }
+}
 
   @override
   Widget build(BuildContext context) {

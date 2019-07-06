@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:Project_Insight/fab_bottom_app_bar.dart';
 import 'package:Project_Insight/fab_with_icons.dart';
 import 'package:Project_Insight/layout.dart';
+import 'package:Project_Insight/Pin_collega.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() => runApp(MyApp());
+
+List<Marker> allMarkers = [];
+MapType currentMapType = MapType.satellite;
 
 Map<int, Color> color =
 {
@@ -21,10 +25,9 @@ Map<int, Color> color =
   700:Color.fromRGBO(102,147,188, .8),
   800:Color.fromRGBO(102,147,188, .9),
   900:Color.fromRGBO(102,147,188, 1),
-}; // Pantone 542
+}; // Pantone 542 VolkerWessels Amersfoort Blauw
 
 MaterialColor colorCustom = MaterialColor(0xFF6693BC, color);
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -48,6 +51,7 @@ class Startpage extends StatefulWidget {
 
 class MapSampleState extends State<Startpage> with TickerProviderStateMixin{
   Completer<GoogleMapController> _controller = Completer();
+
   String _lastSelected = 'TAB: 0';
   static final CameraPosition _cStartPos = CameraPosition(
     target: LatLng(52.190149, 5.438333),
@@ -79,10 +83,10 @@ class MapSampleState extends State<Startpage> with TickerProviderStateMixin{
         title: Text(widget.title),
       ),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: currentMapType,
         initialCameraPosition: _cStartPos,
+        markers: Set.from(allMarkers), //////
         onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
         },
       ),
       bottomNavigationBar: FABBottomAppBar(
@@ -92,11 +96,12 @@ class MapSampleState extends State<Startpage> with TickerProviderStateMixin{
         notchedShape: CircularNotchedRectangle(),
         onTabSelected: _selectedTab,
         items: [
-          FABBottomAppBarItem(iconData: Icons.menu, text: "Menu"),
-          FABBottomAppBarItem(iconData: Icons.layers, text: 'Projecten'),
-          FABBottomAppBarItem(iconData: Icons.dashboard, text: "Collega's"),
+          FABBottomAppBarItem(iconData: Icons.terrain, text: "Maptype"),
+          FABBottomAppBarItem(iconData: Icons.domain, text: 'Projecten'),
+          FABBottomAppBarItem(iconData: Icons.face, text: "Collega's"),
           FABBottomAppBarItem(iconData: Icons.info, text: 'Feedback'),
         ],
+
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _buildFab(
@@ -105,7 +110,7 @@ class MapSampleState extends State<Startpage> with TickerProviderStateMixin{
   }
 
   Widget _buildFab(BuildContext context) {
-    final icons = [ Icons.sms, Icons.mail, Icons.phone ];
+    final icons = [ Icons.person_pin, Icons.pin_drop, Icons.delete ];
     return AnchoredOverlay(
       showOverlay: true,
       overlayBuilder: (context, offset) {
@@ -130,4 +135,46 @@ class MapSampleState extends State<Startpage> with TickerProviderStateMixin{
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_cNewPos));
   }
+}
+class UpdateMapData extends State<Startpage> {      // Should update the map with a new camera position and zoomlevel and mapType but does not work yet
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _cNewLoc = CameraPosition(
+      target: LatLng(51.977124, 5.101344),
+      zoom: 10);
+
+  Future<void> _zoomOut() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_cNewLoc));
+    print("viewport-update");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _zoomOut();
+    print("map-update");
+    return Scaffold(
+      body: GoogleMap(
+        markers: Set.from(allMarkers),
+      ),
+    );
+  }
+}
+
+void updateMap(data) {
+  allMarkers = data;
+}
+
+void clearMap(data) {
+  allMarkers = [];
+}
+
+class UpdateMapStyle extends State<Startpage> {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      body: GoogleMap(
+        mapType: MapType.satellite,
+      ),
+    );
+  MapType currentMapType = MapType.satellite;
 }

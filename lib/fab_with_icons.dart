@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:Project_Insight/main.dart';
+import 'package:Project_Insight/Pin_collega.dart';
+
 
 // https://stackoverflow.com/questions/46480221/flutter-floating-action-button-with-speed-dail
 class FabWithIcons extends StatefulWidget {
@@ -64,13 +67,16 @@ class FabWithIconsState extends State<FabWithIcons> with TickerProviderStateMixi
     return FloatingActionButton(
       onPressed: () {
         if (_controller.isDismissed) {
+          returnList();
           _controller.forward();
+          print("niet gehaald");
+          UpdateMapData();
         } else {
           _controller.reverse();
         }
       },
       tooltip: 'Increment',
-      child: Icon(Icons.add),
+      child: Icon(Icons.map),
       elevation: 2.0,
     );
   }
