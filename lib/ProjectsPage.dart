@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -20,56 +21,13 @@ class MainProjectPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DetailedProjectPage()),
+              MaterialPageRoute(builder: (context) => _buildBody(context)),
             );
           },
         ),
       ),
     );
   }
-}
-
-class DetailedProjectPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Detailed Project Overview"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Show All'),
-        ),
-      ),
-    );
-  }
-}
-
-@override
-Widget build(BuildContext context) {
-  return new Scaffold(
-    body: GoogleMap(
-      mapType: MapType.hybrid,
-      initialCameraPosition: _kGooglePlex,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-    ),
-    floatingActionButton: FloatingActionButton.extended(
-      onPressed: _goToTheLake,
-      label: Text("'Collega's"),
-      icon: Icon(Icons.transfer_within_a_station),
-    ),
-  );
-}
-
-Future<void> _goToTheLake() async {
-  final GoogleMapController controller = await _controller.future;
-  controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-}
 }
 
 Widget _buildBody(BuildContext context) {
