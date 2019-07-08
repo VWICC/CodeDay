@@ -15,22 +15,12 @@ class MainProjectPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('All Current Projects'),
       ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Show Details'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => _buildBody(context)),
-            );
-          },
-        ),
-      ),
+      body: _buildProjectsList(context),
     );
   }
 }
 
-Widget _buildBody(BuildContext context) {
+Widget _buildProjectsList(BuildContext context) {
   return StreamBuilder<QuerySnapshot>(
     stream: Firestore.instance.collection('projects').snapshots(),
     builder: (context, snapshot) {
@@ -51,7 +41,7 @@ Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
 }
 
 Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-  final record = Record.fromSnapshot(data);
+  final record = ProjectRecord.fromSnapshot(data);
 
   return Padding(
     key: ValueKey(record.name),
@@ -71,18 +61,18 @@ Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
 }
 
 
-class Record {
+class ProjectRecord {
   final String name;
   final String worksite;
   final DocumentReference reference;
 
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
+  ProjectRecord.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
         assert(map['worksite'] != null),
         name = map['name'],
         worksite = map['worksite'];
 
-  Record.fromSnapshot(DocumentSnapshot snapshot)
+  ProjectRecord.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
